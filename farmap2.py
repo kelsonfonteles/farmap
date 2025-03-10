@@ -16,8 +16,15 @@ def salvar_resposta(pergunta, resposta):
     df = pd.concat([df, pd.DataFrame({"Pergunta": [pergunta], "Resposta": [resposta]})], ignore_index=True)
     df.to_csv(data_file, index=False)
 
+# Configurar layout responsivo
+st.set_page_config(layout="wide")
+
 # Título
-title_html = "<h1 style='text-align: center; color: #4CAF50;'>Pesquisa de Satisfação - Farmap</h1>"
+title_html = """
+    <div style='text-align: center;'>
+        <h1 style='color: #4CAF50;'>Pesquisa de Satisfação - Farmap</h1>
+    </div>
+"""
 st.markdown(title_html, unsafe_allow_html=True)
 
 # Perguntas e botões
@@ -30,8 +37,8 @@ perguntas = [
 respostas = {"Sim": 1, "Não": -1, "Talvez": 0}
 
 for pergunta in perguntas:
-    st.write(f"### {pergunta}")
-    col1, col2, col3 = st.columns(3)
+    st.markdown(f"<h3 style='text-align: center;'>{pergunta}</h3>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 1, 1])
     with col1:
         if st.button("✅ Sim", key=f"sim_{pergunta}"):
             salvar_resposta(pergunta, respostas["Sim"])
@@ -42,7 +49,9 @@ for pergunta in perguntas:
         if st.button("🤔 Talvez", key=f"talvez_{pergunta}"):
             salvar_resposta(pergunta, respostas["Talvez"])
 
-# Mostrar confirmação
-df = pd.read_csv(data_file)
-st.write("### Respostas registradas:")
-st.dataframe(df)
+# Mensagem de confirmação
+st.markdown("""
+    <div style='text-align: center; margin-top: 20px;'>
+        <h3 style='color: #4CAF50;'>Obrigado por participar da nossa pesquisa!</h3>
+    </div>
+""", unsafe_allow_html=True)
